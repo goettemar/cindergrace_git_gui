@@ -11,8 +11,8 @@ requires-python = ">=3.10"
 license = { text = "PolyForm Noncommercial 1.0.0" }
 authors = [{ name = "Cindergrace" }]
 dependencies = [
-  "requests>=2.31",
-  "cryptography>=41.0",
+  "requests>=2.32.4",
+  "cryptography>=43.0.1",
 ]
 
 [project.optional-dependencies]
@@ -25,3 +25,27 @@ cindergrace-git-gui = "main:main"
 
 [tool.setuptools]
 py-modules = ["main", "git_ops", "storage", "openrouter", "prompt_builder"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = [".venv", "__pycache__", "*.egg-info"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "F",      # Pyflakes
+    "W",      # pycodestyle warnings
+    "I",      # isort
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "SIM",    # flake8-simplify
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

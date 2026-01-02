@@ -1,4 +1,5 @@
 """Git command helpers."""
+
 import os
 import subprocess
 

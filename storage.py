@@ -1,4 +1,5 @@
 """JSON storage helpers for favorites and profiles."""
+
 import json
 import os
 from typing import Any
@@ -8,7 +9,7 @@ def load_json(path: str, default: Any):
     if not os.path.exists(path):
         return default
     try:
-        with open(path, "r", encoding="utf-8") as handle:
+        with open(path, encoding="utf-8") as handle:
             data = json.load(handle)
         return data
     except (OSError, json.JSONDecodeError):

@@ -1,12 +1,13 @@
 """OpenRouter helpers for commit message suggestions."""
+
 import base64
 import os
-from typing import Optional
 
 try:
     from cryptography.fernet import Fernet, InvalidToken
-    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
     from cryptography.hazmat.primitives import hashes
+    from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
     CRYPTO_AVAILABLE = True
 except ImportError:
     CRYPTO_AVAILABLE = False
@@ -17,6 +18,7 @@ except ImportError:
 
 try:
     import requests
+
     REQUESTS_AVAILABLE = True
 except ImportError:
     REQUESTS_AVAILABLE = False
@@ -56,7 +58,7 @@ def decrypt_api_key(payload: dict, password: str) -> str:
     return Fernet(key).decrypt(token).decode("utf-8")
 
 
-def openrouter_request(api_key: str, model: str, prompt: str, api_url: Optional[str] = None) -> str:
+def openrouter_request(api_key: str, model: str, prompt: str, api_url: str | None = None) -> str:
     if not REQUESTS_AVAILABLE:
         raise RuntimeError("requests is required for OpenRouter calls")
 

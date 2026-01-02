@@ -1,5 +1,6 @@
 """Commit message prompt builder."""
 
+
 def build_commit_prompt(status_out: str, diff_text: str) -> str:
     status_trimmed = (status_out or "")[:2000]
     diff_trimmed = (diff_text or "")[:8000]

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Simple Git GUI using Tkinter."""
+
 import json
 import os
 import queue
 import threading
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog, ttk
-from typing import Optional
 
 from git_ops import (
     derive_repo_name,
@@ -56,7 +56,7 @@ class GitGui(tk.Tk):
         self.busy = False
         self.favorites = self._load_favorites()
         self.profiles = self._load_profiles()
-        self.openrouter_api_key: Optional[str] = None
+        self.openrouter_api_key: str | None = None
 
         self._build_ui()
         self._poll_output()
@@ -82,8 +82,12 @@ class GitGui(tk.Tk):
         )
         self.favorites_combo.pack(side=tk.LEFT, padx=6, fill=tk.X, expand=True)
         self.load_fav_btn = ttk.Button(favorites_frame, text="Load", command=self._load_favorite)
-        self.add_fav_btn = ttk.Button(favorites_frame, text="Add Current", command=self._add_favorite)
-        self.remove_fav_btn = ttk.Button(favorites_frame, text="Remove", command=self._remove_favorite)
+        self.add_fav_btn = ttk.Button(
+            favorites_frame, text="Add Current", command=self._add_favorite
+        )
+        self.remove_fav_btn = ttk.Button(
+            favorites_frame, text="Remove", command=self._remove_favorite
+        )
         self.load_fav_btn.pack(side=tk.LEFT, padx=4)
         self.add_fav_btn.pack(side=tk.LEFT, padx=4)
         self.remove_fav_btn.pack(side=tk.LEFT, padx=4)
@@ -99,15 +103,21 @@ class GitGui(tk.Tk):
         )
         self.profile_combo.pack(side=tk.LEFT, padx=6, fill=tk.X, expand=True)
         self.profile_load_btn = ttk.Button(profile_frame, text="Load", command=self._load_profile)
-        self.profile_delete_btn = ttk.Button(profile_frame, text="Delete", command=self._delete_profile)
+        self.profile_delete_btn = ttk.Button(
+            profile_frame, text="Delete", command=self._delete_profile
+        )
         self.profile_load_btn.pack(side=tk.LEFT, padx=4)
         self.profile_delete_btn.pack(side=tk.LEFT, padx=4)
 
         profile_save_frame = ttk.Frame(self, padding=10)
         profile_save_frame.pack(fill=tk.X)
         ttk.Label(profile_save_frame, text="Profile Name:").pack(side=tk.LEFT)
-        ttk.Entry(profile_save_frame, textvariable=self.profile_name_var, width=30).pack(side=tk.LEFT, padx=6)
-        self.profile_save_btn = ttk.Button(profile_save_frame, text="Save/Update", command=self._save_profile)
+        ttk.Entry(profile_save_frame, textvariable=self.profile_name_var, width=30).pack(
+            side=tk.LEFT, padx=6
+        )
+        self.profile_save_btn = ttk.Button(
+            profile_save_frame, text="Save/Update", command=self._save_profile
+        )
         self.profile_save_btn.pack(side=tk.LEFT, padx=4)
 
         action_frame = ttk.Frame(self, padding=10)
@@ -121,7 +131,9 @@ class GitGui(tk.Tk):
         self.rebase_btn = ttk.Button(action_frame, text="Rebase", command=self._rebase)
         self.stash_btn = ttk.Button(action_frame, text="Stash", command=self._stash)
         self.stash_pop_btn = ttk.Button(action_frame, text="Stash Pop", command=self._stash_pop)
-        self.branches_btn = ttk.Button(action_frame, text="Refresh Branches", command=self._refresh_branches)
+        self.branches_btn = ttk.Button(
+            action_frame, text="Refresh Branches", command=self._refresh_branches
+        )
         self.checkout_btn = ttk.Button(action_frame, text="Checkout", command=self._checkout_branch)
         self.auth_btn = ttk.Button(action_frame, text="Auth Check", command=self._auth_check)
 
@@ -143,7 +155,9 @@ class GitGui(tk.Tk):
         branch_frame = ttk.Frame(self, padding=10)
         branch_frame.pack(fill=tk.X)
         ttk.Label(branch_frame, text="Branch:").pack(side=tk.LEFT)
-        self.branch_combo = ttk.Combobox(branch_frame, textvariable=self.branch_var, values=[], state="readonly")
+        self.branch_combo = ttk.Combobox(
+            branch_frame, textvariable=self.branch_var, values=[], state="readonly"
+        )
         self.branch_combo.pack(side=tk.LEFT, padx=6, fill=tk.X, expand=True)
         ttk.Label(branch_frame, text="Remote:").pack(side=tk.LEFT, padx=6)
         ttk.Entry(branch_frame, textvariable=self.remote_var, width=12).pack(side=tk.LEFT)
@@ -168,16 +182,24 @@ class GitGui(tk.Tk):
         branch_manage_frame = ttk.Frame(self, padding=10)
         branch_manage_frame.pack(fill=tk.X)
         ttk.Label(branch_manage_frame, text="New Branch:").pack(side=tk.LEFT)
-        ttk.Entry(branch_manage_frame, textvariable=self.new_branch_var, width=30).pack(side=tk.LEFT, padx=6)
-        self.create_branch_btn = ttk.Button(branch_manage_frame, text="Create", command=self._create_branch)
-        self.delete_branch_btn = ttk.Button(branch_manage_frame, text="Delete", command=self._delete_branch)
+        ttk.Entry(branch_manage_frame, textvariable=self.new_branch_var, width=30).pack(
+            side=tk.LEFT, padx=6
+        )
+        self.create_branch_btn = ttk.Button(
+            branch_manage_frame, text="Create", command=self._create_branch
+        )
+        self.delete_branch_btn = ttk.Button(
+            branch_manage_frame, text="Delete", command=self._delete_branch
+        )
         self.create_branch_btn.pack(side=tk.LEFT, padx=4)
         self.delete_branch_btn.pack(side=tk.LEFT, padx=4)
 
         commit_frame = ttk.Frame(self, padding=10)
         commit_frame.pack(fill=tk.X)
         ttk.Label(commit_frame, text="Commit Message:").pack(side=tk.LEFT)
-        ttk.Entry(commit_frame, textvariable=self.commit_msg_var, width=50).pack(side=tk.LEFT, padx=6, fill=tk.X, expand=True)
+        ttk.Entry(commit_frame, textvariable=self.commit_msg_var, width=50).pack(
+            side=tk.LEFT, padx=6, fill=tk.X, expand=True
+        )
         self.stage_btn = ttk.Button(commit_frame, text="Stage All", command=self._stage_all)
         self.commit_btn = ttk.Button(commit_frame, text="Commit", command=self._commit)
         self.stage_btn.pack(side=tk.LEFT, padx=4)
@@ -189,12 +211,20 @@ class GitGui(tk.Tk):
         ttk.Entry(openrouter_frame, textvariable=self.openrouter_model_var, width=40).grid(
             row=0, column=1, sticky="w", padx=6
         )
-        self.openrouter_status_label = ttk.Label(openrouter_frame, textvariable=self.openrouter_status_var)
+        self.openrouter_status_label = ttk.Label(
+            openrouter_frame, textvariable=self.openrouter_status_var
+        )
         self.openrouter_status_label.grid(row=0, column=2, sticky="w", padx=6)
 
-        self.openrouter_set_btn = ttk.Button(openrouter_frame, text="Set API Key", command=self._set_openrouter_key)
-        self.openrouter_unlock_btn = ttk.Button(openrouter_frame, text="Unlock Key", command=self._unlock_openrouter_key)
-        self.openrouter_test_btn = ttk.Button(openrouter_frame, text="Test", command=self._test_openrouter)
+        self.openrouter_set_btn = ttk.Button(
+            openrouter_frame, text="Set API Key", command=self._set_openrouter_key
+        )
+        self.openrouter_unlock_btn = ttk.Button(
+            openrouter_frame, text="Unlock Key", command=self._unlock_openrouter_key
+        )
+        self.openrouter_test_btn = ttk.Button(
+            openrouter_frame, text="Test", command=self._test_openrouter
+        )
         self.openrouter_suggest_btn = ttk.Button(
             openrouter_frame,
             text="Suggest Commit Message",
@@ -241,7 +271,9 @@ class GitGui(tk.Tk):
         history_header = ttk.Frame(history_frame)
         history_header.pack(fill=tk.X)
         ttk.Label(history_header, text="History (last 50 commits)").pack(side=tk.LEFT)
-        self.refresh_history_btn = ttk.Button(history_header, text="Refresh History", command=self._refresh_history)
+        self.refresh_history_btn = ttk.Button(
+            history_header, text="Refresh History", command=self._refresh_history
+        )
         self.refresh_history_btn.pack(side=tk.LEFT, padx=6)
         self.history_text = tk.Text(history_frame, wrap=tk.WORD, height=10)
         self.history_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -254,7 +286,9 @@ class GitGui(tk.Tk):
         diff_header = ttk.Frame(diff_frame)
         diff_header.pack(fill=tk.X)
         ttk.Label(diff_header, text="Diff Summary").pack(side=tk.LEFT)
-        self.refresh_diff_btn = ttk.Button(diff_header, text="Refresh Diff", command=self._refresh_diff)
+        self.refresh_diff_btn = ttk.Button(
+            diff_header, text="Refresh Diff", command=self._refresh_diff
+        )
         self.refresh_diff_btn.pack(side=tk.LEFT, padx=6)
         self.diff_text = tk.Text(diff_frame, wrap=tk.WORD, height=10)
         self.diff_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -537,7 +571,9 @@ class GitGui(tk.Tk):
             f"Checkout remote '{remote_branch}' as local '{local_branch}'?",
         ):
             return
-        self._run_async(["checkout", "-b", local_branch, remote_branch], f"checkout {remote_branch}")
+        self._run_async(
+            ["checkout", "-b", local_branch, remote_branch], f"checkout {remote_branch}"
+        )
 
     def _create_branch(self):
         name = self.new_branch_var.get().strip()
@@ -678,7 +714,11 @@ class GitGui(tk.Tk):
         helper = read_git_config("credential.helper")
         keys = ssh_key_status()
 
-        lines = ["Auth check:", f"- user.name: {name or 'missing'}", f"- user.email: {email or 'missing'}"]
+        lines = [
+            "Auth check:",
+            f"- user.name: {name or 'missing'}",
+            f"- user.email: {email or 'missing'}",
+        ]
         lines.append(f"- credential.helper: {helper or 'not set'}")
         if keys:
             lines.append("- ssh keys: " + ", ".join(keys))
@@ -730,12 +770,16 @@ class GitGui(tk.Tk):
 
     def _set_openrouter_key(self):
         if not CRYPTO_AVAILABLE:
-            messagebox.showerror("Missing dependency", "Install cryptography to store the key securely.")
+            messagebox.showerror(
+                "Missing dependency", "Install cryptography to store the key securely."
+            )
             return
         api_key = simpledialog.askstring("OpenRouter", "Enter OpenRouter API key:", show="*")
         if not api_key:
             return
-        password = simpledialog.askstring("OpenRouter", "Set a password to encrypt the key:", show="*")
+        password = simpledialog.askstring(
+            "OpenRouter", "Set a password to encrypt the key:", show="*"
+        )
         if not password:
             return
         payload = encrypt_api_key(api_key.strip(), password)
@@ -759,7 +803,7 @@ class GitGui(tk.Tk):
         if not password:
             return
         try:
-            with open(OPENROUTER_CONFIG_PATH, "r", encoding="utf-8") as handle:
+            with open(OPENROUTER_CONFIG_PATH, encoding="utf-8") as handle:
                 payload = json.load(handle)
             self.openrouter_api_key = decrypt_api_key(payload, password)
             self._refresh_openrouter_status()

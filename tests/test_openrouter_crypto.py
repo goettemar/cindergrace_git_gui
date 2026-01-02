@@ -2,7 +2,6 @@ import pytest
 
 from openrouter import CRYPTO_AVAILABLE, decrypt_api_key, encrypt_api_key
 
-
 pytestmark = pytest.mark.skipif(not CRYPTO_AVAILABLE, reason="cryptography not installed")
 
 
