@@ -810,7 +810,7 @@ class GitGui(tk.Tk):
             self._append_output("OpenRouter key unlocked for this session.")
         except InvalidToken:
             messagebox.showerror("Error", "Invalid password.")
-        except (OSError, json.JSONDecodeError, ValueError) as exc:
+        except (json.JSONDecodeError, ValueError, OSError) as exc:
             messagebox.showerror("Error", f"Failed to unlock key: {exc}")
 
     def _test_openrouter(self):
