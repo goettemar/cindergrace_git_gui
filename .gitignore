@@ -1,0 +1,20 @@
+# venv
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# OS
+.DS_Store
+
+# Local markers
+.cindergrace_git_gui_installed

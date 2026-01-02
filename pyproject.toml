@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cindergrace-git-gui"
+version = "0.1.0"
+description = "Lightweight Git GUI for everyday tasks: profiles, staging, history, and AI commit messages."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "PolyForm Noncommercial 1.0.0" }
+authors = [{ name = "Cindergrace" }]
+dependencies = [
+  "requests>=2.31",
+  "cryptography>=41.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0",
+]
+
+[project.scripts]
+cindergrace-git-gui = "main:main"
+
+[tool.setuptools]
+py-modules = ["main", "git_ops", "storage", "openrouter", "prompt_builder"]
