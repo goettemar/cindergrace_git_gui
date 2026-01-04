@@ -1,5 +1,7 @@
 # Cindergrace Git GUI (Tkinter)
 
+> Hinweis: Dieses Repository ist ein Hobby-/Experimentierprojekt. Es handelt sich nicht um ein gewerbliches Angebot (keine Auftragsannahme, keine Garantien, kein Supportversprechen).
+
 Lightweight Git GUI for everyday tasks: profiles, staging, history, and AI commit messages.
 
 ## License
